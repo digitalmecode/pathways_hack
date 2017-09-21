@@ -20,18 +20,21 @@ namespace Microsoft.Bot.Sample.FormBot
         internal static IDialog<PathwaysProfile> MakeRootDialog()
         {
             return Chain.From(() => FormDialog.FromForm(PathwaysProfile.BuildForm))
-                .Do(async (context, profileDialog) => {
-                    var profile = await profileDialog;
-                    var json = JsonConvert.SerializeObject(profile);
-                    var requestData = new StringContent(json, Encoding.UTF8, "application/json");
-                    string logicAppsUrl = ConfigurationManager.AppSettings["ProfileCompleteApi"];
-                    using (var client = new HttpClient())
-                    {
-                        var response = await client.PostAsync(logicAppsUrl, requestData);
-                        var result = await response.Content.ReadAsStringAsync();
-                        await context.PostAsync("Logic App returned: " + result);
-                    }
-                });
+                .Do(OnProfileComplete);
+        }
+
+        private static async Task OnProfileComplete(IBotContext context, IAwaitable<PathwaysProfile> profileDialog)
+        {
+            var profile = await profileDialog;
+            var json = JsonConvert.SerializeObject(profile);
+            var requestData = new StringContent(json, Encoding.UTF8, "application/json");
+            string logicAppsUrl = ConfigurationManager.AppSettings["ProfileCompleteApi"];
+            using (var client = new HttpClient())
+            {
+                var response = await client.PostAsync(logicAppsUrl, requestData);
+                var result = await response.Content.ReadAsStringAsync();
+                await context.PostAsync("Logic App returned: " + result);
+            }
         }
 
         /// <summary>
