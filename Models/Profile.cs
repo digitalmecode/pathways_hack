@@ -11,13 +11,14 @@ using System.Runtime.Serialization.Formatters;
 // in a conversation.
 namespace Microsoft.Bot.Sample.FormBot
 {
-    public enum Cities
+    public enum eCities
     {
         Manchester =1 , Plymouth =2, Brighton=3, Other=0
     };
-    public enum Interests { Environment, Engineering, Sports, PublicSpeaking, Arts, Politics, OutwardBound, Gaming, Coding, Travel};
-    public enum BreadOptions { NineGrainWheat, NineGrainHoneyOat, Italian, ItalianHerbsAndCheese, Flatbread };
-    public enum EducationLevels { School, College, University };
+
+    public enum eCookingItems { Cake, Pasta, Steak}
+    public enum eInterests { Environment, Engineering, Cooking, Sports, PublicSpeaking, Arts, Politics, OutwardBound, Gaming, Coding, Travel};
+    public enum eEducationLevels { School, College, University };
 
     [Serializable]
     public class PathwaysProfile
@@ -29,13 +30,13 @@ namespace Microsoft.Bot.Sample.FormBot
         public string Email;
 
         [Prompt("For the moment we have oppurtunities in these cities. Would you let us know which city you live in? Or just choose other.  {||}")]
-        public Cities? City;
+        public eCities? City;
 
         [Prompt("Are you interested in any of these areas? We will use this to customise your experience. Just type in the numbers separated with commas. {||}")]
-        public List<Interests> Interests;
+        public List<eInterests> Interests;
 
         [Prompt("What is the higest level of education you have completed? {||}")]
-        public EducationLevels? EducationLevel;
+        public eEducationLevels? EducationLevel;
 
         [Prompt("Are you working at the moment?")]
         public bool IsWorking;
@@ -45,6 +46,9 @@ namespace Microsoft.Bot.Sample.FormBot
 
         [Prompt("Would you please tell me a little about your inspirations?")]
         public string Inspiration;
+
+        [Prompt("What kind of cooking do you like? {||}")]
+        public string Cooking;
 
         public static IForm<PathwaysProfile> BuildForm()
         {
@@ -57,6 +61,8 @@ namespace Microsoft.Bot.Sample.FormBot
                     .Field(nameof(EducationLevel))
                     .Field(nameof(IsWorking))
                     .Field(nameof(Work), (c) => c.IsWorking == true)
+                    .Field(nameof(Cooking), (c) => c.Interests.Contains(eInterests.Cooking))
+
                     .AddRemainingFields()
                     .Confirm("Are you sure? Here are your current selections: {*}")
                     .Build();
