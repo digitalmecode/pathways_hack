@@ -13,9 +13,9 @@ namespace Microsoft.Bot.Sample.FormBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        internal static IDialog<SandwichOrder> MakeRootDialog()
+        internal static IDialog<PathwaysProfile> MakeRootDialog()
         {
-            return Chain.From(() => FormDialog.FromForm(SandwichOrder.BuildForm));
+            return Chain.From(() => FormDialog.FromForm(PathwaysProfile.BuildForm));
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project=".\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('.\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project=".\packages\Microsoft.Net.Compilers.1.2.1\build\Microsoft.Net.Compilers.props" Condition="Exists('.\packages\Microsoft.Net.Compilers.1.2.1\build\Microsoft.Net.Compilers.props')" />
@@ -25,6 +25,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -135,7 +136,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\Sandwich.cs" />
+    <Compile Include="Models\Profile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -188,5 +189,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="PostDeployScripts\IncludeSources.targets" />  
+  <Import Project="PostDeployScripts\IncludeSources.targets" />
 </Project>
