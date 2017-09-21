@@ -43,6 +43,15 @@ namespace Microsoft.Bot.Sample.FormBot
         {
             return new FormBuilder<PathwaysProfile>()
                     .Message("Hello there! Welcome to your future")
+                    .Field(nameof(Name))
+                    .Field(nameof(Email))
+                    .Field(nameof(City))
+                    .Field(nameof(Interests))
+                    .Field(nameof(EducationLevel))
+                    .Field(nameof(IsWorking))
+                    .Field(nameof(Work), (c) => c.IsWorking == true)
+                    .AddRemainingFields()
+                    .Confirm("Are you sure? Here are your current selections: {*}")
                     .Build();
         }
     }
