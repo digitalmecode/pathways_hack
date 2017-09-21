@@ -8,9 +8,6 @@ using System.Net.Http;
 using System.Web.Http.Description;
 using System.Diagnostics;
 using System;
-using System.Text;
-using Newtonsoft.Json;
-using System.Configuration;
 
 namespace Microsoft.Bot.Sample.FormBot
 {
@@ -25,21 +22,11 @@ namespace Microsoft.Bot.Sample.FormBot
 
         private static async Task OnProfileComplete(IBotContext context, IAwaitable<PathwaysProfile> profileDialog)
         {
-            var profile = await profileDialog;
-            var response = await PostObjectAsJsonToUrl(profile, "ProfileCompleteApi");
-            await context.PostAsync("Logic App returned: " + response);
-        }
+            //var badges = await new BadgeSearch { Category = "cooking" }.PostAsJsonToApi("GetInterestMatchApi");
 
-        private static async Task<string> PostObjectAsJsonToUrl(object jsonObject, string UrlSetting)
-        {
-            var json = JsonConvert.SerializeObject(jsonObject);
-            var requestData = new StringContent(json, Encoding.UTF8, "application/json");
-            string logicAppsUrl = ConfigurationManager.AppSettings[UrlSetting];
-            using (var client = new HttpClient())
-            {
-                var response = await client.PostAsync(logicAppsUrl, requestData);
-                return await response.Content.ReadAsStringAsync();
-            }
+            var profile = await profileDialog;
+            var response = await profile.PostAsJsonToApi("ProfileCompleteApi");
+            await context.PostAsync("Logic App returned: " + response);
         }
 
         /// <summary>
