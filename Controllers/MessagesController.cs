@@ -26,14 +26,19 @@ namespace Microsoft.Bot.Sample.FormBot
         private static async Task OnProfileComplete(IBotContext context, IAwaitable<PathwaysProfile> profileDialog)
         {
             var profile = await profileDialog;
-            var json = JsonConvert.SerializeObject(profile);
+            var response = await PostObjectAsJsonToUrl(profile, "ProfileCompleteApi");
+            await context.PostAsync("Logic App returned: " + response);
+        }
+
+        private static async Task<string> PostObjectAsJsonToUrl(object jsonObject, string UrlSetting)
+        {
+            var json = JsonConvert.SerializeObject(jsonObject);
             var requestData = new StringContent(json, Encoding.UTF8, "application/json");
-            string logicAppsUrl = ConfigurationManager.AppSettings["ProfileCompleteApi"];
+            string logicAppsUrl = ConfigurationManager.AppSettings[UrlSetting];
             using (var client = new HttpClient())
             {
                 var response = await client.PostAsync(logicAppsUrl, requestData);
-                var result = await response.Content.ReadAsStringAsync();
-                await context.PostAsync("Logic App returned: " + result);
+                return await response.Content.ReadAsStringAsync();
             }
         }
 
@@ -64,13 +69,6 @@ namespace Microsoft.Bot.Sample.FormBot
                 }
             }
             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
-        }
-
-
-
-        public static string GetEnvironmentVariable(string name)
-        {
-            return Environment.GetEnvironmentVariable(name);
         }
     }
 }
