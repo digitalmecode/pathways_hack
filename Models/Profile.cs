@@ -13,7 +13,7 @@ namespace Microsoft.Bot.Sample.FormBot
 {
     public enum Cities
     {
-        Manchester, Plymouth, Birghton
+        Manchester = 1, Plymouth = 2, Brighton =3, Other = 0
     };
     public enum Interests { Environment, Engineering, Sports, PublicSpeaking, Arts, Politics, OutwardBound, Gaming, Coding, Travel};
     public enum BreadOptions { NineGrainWheat, NineGrainHoneyOat, Italian, ItalianHerbsAndCheese, Flatbread };
@@ -22,13 +22,21 @@ namespace Microsoft.Bot.Sample.FormBot
     [Serializable]
     public class PathwaysProfile
     {
+        [Prompt("What would you like me call you?")]
         public string Name;
+        [Prompt("Can we get your email address for our records? Promise we won't send you spam emails.")]
         public string Email;
+        [Prompt("For the moment we have opputunities in these cities. Would you let us know which city you live in? Or just choose other")]
         public Cities? City;
+        [Prompt("Are you interested in any of these areas? We will use this to customise your experience. Just type in the numbers separated with commas.")]
         public List<Interests> Interests;
+        [Prompt("What is the higest level of education you have completed?")]
         public EducationLevels? EducationLevel;
+        [Prompt("Are you working at the moment?")]
         public bool IsWorking;
+        [Prompt("What role do you work as?")]
         public string Work;
+        [Prompt("What are most inpired by?")]
         public string Inspiration;
 
         public static IForm<PathwaysProfile> BuildForm()
