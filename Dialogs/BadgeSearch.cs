@@ -1,4 +1,4 @@
-﻿namespace Microsoft.Bot.Sample.FormBot
+﻿namespace FormBot.Dialogs
 {
     public class BadgeSearch
     {

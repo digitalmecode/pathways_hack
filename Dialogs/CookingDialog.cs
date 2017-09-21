@@ -6,10 +6,12 @@ using System.Web;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.Internals.Fibers;
+using Microsoft.Bot.Sample.FormBot;
+using Newtonsoft.Json;
 
 namespace FormBot.Dialogs
 {
-	[Serializable]
+    [Serializable]
 	public class CookingDialog:IDialog
 	{
 		public async Task StartAsync(IDialogContext context)
@@ -18,27 +20,20 @@ namespace FormBot.Dialogs
 		}
 		private static async Task Respond(IDialogContext context)
 		{
-			var message =  context.MakeMessage();
+            var badgeSearch = await new BadgeSearch { Category = "cooking" }.PostAsJsonToApi("GetInterestMatchApi");
+            var results = JsonConvert.DeserializeObject<BadgeSearchResults>(badgeSearch);
+            			var message =  context.MakeMessage();
 			ThumbnailCard card = new ThumbnailCard()
 			{
-				Title = "Professional Chef",
-				Images = new List<CardImage> { new CardImage(url: "https://obaprod.s3-eu-west-1.amazonaws.com/fw/cm/image/44/1035/o_1b3pi4nsl11ve11bajngj3d15jma_180__o.PNG") },
+				Title = results.BadgeDetail[0].Name,
+				Images = new List<CardImage> { new CardImage(url: results.BadgeDetail[0].ImageUrl) },
 				Buttons=new List<CardAction> { new CardAction(
-
 					"openUrl",
-					"Start this badge",null,"https://www.openbadgeacademy.com/badge/1035")}
-
-
+					"Start this badge",null,results.BadgeDetail[0].Url)}
 			};
 			message.Attachments.Add(card.ToAttachment());
-			message.Text = "[Professional Chef](https://www.openbadgeacademy.com/badge/1035)";
-			message.TextFormat = "markdown";
-			//message.Locale = "en-us";
-
-			//var message = "Test";
+            message.Text = "We found this badge for you";
 			await context.PostAsync(message);
-			
-			
 		}
 
 		public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
@@ -49,6 +44,5 @@ namespace FormBot.Dialogs
 
 		}
 	}
-
 }
  
