@@ -7,6 +7,10 @@ using Microsoft.Bot.Builder.FormFlow;
 using System.Net.Http;
 using System.Web.Http.Description;
 using System.Diagnostics;
+using System;
+using System.Text;
+using Newtonsoft.Json;
+using System.Configuration;
 
 namespace Microsoft.Bot.Sample.FormBot
 {
@@ -15,7 +19,19 @@ namespace Microsoft.Bot.Sample.FormBot
     {
         internal static IDialog<PathwaysProfile> MakeRootDialog()
         {
-            return Chain.From(() => FormDialog.FromForm(PathwaysProfile.BuildForm));
+            return Chain.From(() => FormDialog.FromForm(PathwaysProfile.BuildForm))
+                .Do(async (context, profileDialog) => {
+                    var profile = await profileDialog;
+                    var json = JsonConvert.SerializeObject(profile);
+                    var requestData = new StringContent(json, Encoding.UTF8, "application/json");
+                    string logicAppsUrl = ConfigurationManager.AppSettings["ProfileCompleteApi"];
+                    using (var client = new HttpClient())
+                    {
+                        var response = await client.PostAsync(logicAppsUrl, requestData);
+                        var result = await response.Content.ReadAsStringAsync();
+                        await context.PostAsync("Logic App returned: " + result);
+                    }
+                });
         }
 
         /// <summary>
@@ -45,6 +61,13 @@ namespace Microsoft.Bot.Sample.FormBot
                 }
             }
             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
+        }
+
+
+
+        public static string GetEnvironmentVariable(string name)
+        {
+            return Environment.GetEnvironmentVariable(name);
         }
     }
 }
