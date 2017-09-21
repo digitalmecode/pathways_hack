@@ -42,7 +42,7 @@ namespace Microsoft.Bot.Sample.FormBot
         public static IForm<SandwichOrder> BuildForm()
         {
             return new FormBuilder<SandwichOrder>()
-                    .Message("Welcome to the simple sandwich order bot!")
+                    .Message("Hello there! Welcome to your future")
                     .Build();
         }
     };
