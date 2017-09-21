@@ -127,11 +127,21 @@
   <ItemGroup>
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Dialogs\BadgeDetail.cs" />
+    <Compile Include="Dialogs\BadgeSearch.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Controllers\ObjectExtensions.cs" />
+    <Compile Include="Dialogs\BadgeSearchResults.cs" />
+    <Compile Include="Dialogs\CookingDialog.cs" />
+    <Compile Include="Dialogs\GreetingDialog.cs" />
+    <Compile Include="Dialogs\LUISDialog.cs" />
+    <Compile Include="Dialogs\PathwayDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

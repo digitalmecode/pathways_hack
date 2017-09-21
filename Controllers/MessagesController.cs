@@ -11,27 +11,40 @@ using System;
 using System.Text;
 using Newtonsoft.Json;
 using System.Configuration;
+using Microsoft.Bot.Sample.FormBot.Dialogs;
 
 namespace Microsoft.Bot.Sample.FormBot
 {
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        internal static IDialog<PathwaysProfile> MakeRootDialog()
+        internal static IDialog<PathwaysProfile> MakeRootDialogDeprecated()
         {
             return Chain.From(() => FormDialog.FromForm(PathwaysProfile.BuildForm))
-                .Do(async (context, profileDialog) => {
-                    var profile = await profileDialog;
-                    var json = JsonConvert.SerializeObject(profile);
-                    var requestData = new StringContent(json, Encoding.UTF8, "application/json");
-                    string logicAppsUrl = ConfigurationManager.AppSettings["ProfileCompleteApi"];
-                    using (var client = new HttpClient())
-                    {
-                        var response = await client.PostAsync(logicAppsUrl, requestData);
-                        var result = await response.Content.ReadAsStringAsync();
-                        await context.PostAsync("Logic App returned: " + result);
-                    }
-                });
+                //.ContinueWith(new LUISDialog(PathwaysProfile.BuildForm), AfterLuisContinuation)
+				.Do(OnProfileComplete); 
+        }
+
+		internal static IDialog<PathwaysProfile> MakeRootDialog()
+		{
+			return Chain.From(() => new LUISDialog(PathwaysProfile.BuildForm))
+				.Do(OnProfileComplete); ;
+		}
+
+
+		private async static Task<IDialog<string>> AfterLuisContinuation(IBotContext context, IAwaitable<object> res)
+		{
+			var token = await res;
+			var name = "User";
+			context.UserData.TryGetValue<string>("Name", out name);
+			return Chain.Return($"Thank you for using the Pathway bot: {name}");
+		}
+
+		private static async Task OnProfileComplete(IBotContext context, IAwaitable<PathwaysProfile> profileDialog)
+        {
+            var profile = await profileDialog;
+            var response = await profile.PostAsJsonToApi("ProfileCompleteApi");
+            await context.PostAsync("Logic App returned: " + response);
         }
 
         /// <summary>
@@ -61,13 +74,6 @@ namespace Microsoft.Bot.Sample.FormBot
                 }
             }
             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
-        }
-
-
-
-        public static string GetEnvironmentVariable(string name)
-        {
-            return Environment.GetEnvironmentVariable(name);
         }
     }
 }
