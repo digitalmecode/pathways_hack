@@ -28,7 +28,7 @@ namespace Microsoft.Bot.Sample.FormBot
         [Prompt("Can we get your email address for our records? Promise we won't send you spam or share your email with anyone :)")]
         public string Email;
 
-        [Prompt("For the moment we have opputunities in these cities. Would you let us know which city you live in? Or just choose other.  {||}")]
+        [Prompt("For the moment we have oppurtunities in these cities. Would you let us know which city you live in? Or just choose other.  {||}")]
         public Cities? City;
 
         [Prompt("Are you interested in any of these areas? We will use this to customise your experience. Just type in the numbers separated with commas. {||}")]
@@ -43,7 +43,7 @@ namespace Microsoft.Bot.Sample.FormBot
         [Prompt("What role do you work as?")]
         public string Work;
 
-        [Prompt("What are most inpired by?")]
+        [Prompt("Would you please tell me a little about your inspirations?")]
         public string Inspiration;
 
         public static IForm<PathwaysProfile> BuildForm()
