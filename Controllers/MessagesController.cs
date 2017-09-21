@@ -7,6 +7,7 @@ using Microsoft.Bot.Builder.FormFlow;
 using System.Net.Http;
 using System.Web.Http.Description;
 using System.Diagnostics;
+using System;
 
 namespace Microsoft.Bot.Sample.FormBot
 {
@@ -45,6 +46,13 @@ namespace Microsoft.Bot.Sample.FormBot
                 }
             }
             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
+        }
+
+
+
+        public static string GetEnvironmentVariable(string name)
+        {
+            return Environment.GetEnvironmentVariable(name);
         }
     }
 }
