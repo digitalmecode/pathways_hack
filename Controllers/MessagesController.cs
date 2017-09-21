@@ -11,19 +11,36 @@ using System;
 using System.Text;
 using Newtonsoft.Json;
 using System.Configuration;
+using Microsoft.Bot.Sample.FormBot.Dialogs;
 
 namespace Microsoft.Bot.Sample.FormBot
 {
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        internal static IDialog<PathwaysProfile> MakeRootDialog()
+        internal static IDialog<PathwaysProfile> MakeRootDialogDeprecated()
         {
             return Chain.From(() => FormDialog.FromForm(PathwaysProfile.BuildForm))
-                .Do(OnProfileComplete);
+                //.ContinueWith(new LUISDialog(PathwaysProfile.BuildForm), AfterLuisContinuation)
+				.Do(OnProfileComplete); 
         }
 
-        private static async Task OnProfileComplete(IBotContext context, IAwaitable<PathwaysProfile> profileDialog)
+		internal static IDialog<PathwaysProfile> MakeRootDialog()
+		{
+			return Chain.From(() => new LUISDialog(PathwaysProfile.BuildForm))
+				.Do(OnProfileComplete); ;
+		}
+
+
+		private async static Task<IDialog<string>> AfterLuisContinuation(IBotContext context, IAwaitable<object> res)
+		{
+			var token = await res;
+			var name = "User";
+			context.UserData.TryGetValue<string>("Name", out name);
+			return Chain.Return($"Thank you for using the Pathway bot: {name}");
+		}
+
+		private static async Task OnProfileComplete(IBotContext context, IAwaitable<PathwaysProfile> profileDialog)
         {
             var profile = await profileDialog;
             var response = await PostObjectAsJsonToUrl(profile, "ProfileCompleteApi");
