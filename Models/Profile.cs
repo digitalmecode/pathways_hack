@@ -61,7 +61,19 @@ namespace Microsoft.Bot.Sample.FormBot
                     .Field(nameof(EducationLevel))
                     .Field(nameof(IsWorking))
                     .Field(nameof(Work), (c) => c.IsWorking == true)
-                    .Field(nameof(Cooking), (c) => c.Interests.Contains(eInterests.Cooking))
+                    .Field(nameof(Cooking), (c) => c.Interests.Contains(eInterests.Cooking),
+                    validate: async (state, values) =>
+                    {
+
+                        var result = new ValidateResult { IsValid = false, Value = values };
+                        if (values != null && Enum.IsDefined(typeof(eCookingItems), values))
+                        {
+                            result.IsValid = true;
+                        }else {
+                            result.Feedback = "Sorry, we could not find the option: "+ values + ". However, we have taken note of this option and may implement it in the future :).";
+                        }
+                        return result;
+                    })
 
                     .AddRemainingFields()
                     .Confirm("Are you sure? Here are your current selections: {*}")
