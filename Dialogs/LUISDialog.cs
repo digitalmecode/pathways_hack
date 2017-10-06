@@ -4,10 +4,7 @@ using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Microsoft.Bot.Sample.FormBot.Dialogs
 {
@@ -22,62 +19,61 @@ namespace Microsoft.Bot.Sample.FormBot.Dialogs
 			this.Profile = profile;
 		}
 
-
 		[LuisIntent("")]
 		public async Task None(IDialogContext context, LuisResult result)
 		{
-			await context.PostAsync("I'm sorry I don't know what you mean.");
+			await context.PostAsync("Sorry, we could not find the suggestions for you :( I will take note of this and work hard to find something that would excite you :)");
 			context.Wait(MessageReceived);
 		}
 
 		[LuisIntent("Greeting")]
 		public async Task Greeting(IDialogContext context, LuisResult result)
 		{
-			var enrollmentForm = new FormDialog<PathwaysProfile>(new PathwaysProfile(), this.Profile, FormOptions.PromptInStart);
-			context.Call<PathwaysProfile>(enrollmentForm, Callback);
-			//context.Call(new CookingDialog(), Callback);
+			var pathwaysForm = new FormDialog<PathwaysProfile>(new PathwaysProfile(), this.Profile, FormOptions.PromptInStart);
+			context.Call<PathwaysProfile>(pathwaysForm, Callback);
+        }
 
-			//context.Call(new GreetingDialog(), Callback);
-		}
-
-		private async Task Callback(IDialogContext context, IAwaitable<object> result)
+        private async Task Callback(IDialogContext context, IAwaitable<object> result)
 		{
-			context.Wait(MessageReceived);
-		}
+            //This starts each time an intent can not be found
+		    context.Wait(MessageReceived);
+        }
 
-		[LuisIntent("Cooking")]
+        [LuisIntent("Cooking")]
 		public async Task Cooking(IDialogContext context, LuisResult result)
 		{
-			//var enrollmentForm = new FormDialog<RoomReservation>(new RoomReservation(), this.ReserveRoom, FormOptions.PromptInStart);
-			//context.Call<RoomReservation>(enrollmentForm, Callback);
 			context.Call(new CookingDialog(), Callback);
-
-			
 		}
 
-		//[LuisIntent("QueryAmenities")]
-		//public async Task QueryAmenities(IDialogContext context, LuisResult result)
-		//{
-		//	foreach (var entity in result.Entities.Where(Entity => Entity.Type == "Amenity"))
-		//	{
-		//		var value = entity.Entity.ToLower();
-		//		if (value == "pool" || value == "gym" || value == "wifi" || value == "towels")
-		//		{
-		//			await context.PostAsync("Yes we have that!");
-		//			context.Wait(MessageReceived);
-		//			return;
-		//		}
-		//		else
-		//		{
-		//			await context.PostAsync("I'm sorry we don't have that.");
-		//			context.Wait(MessageReceived);
-		//			return;
-		//		}
-		//	}
-		//	await context.PostAsync("I'm sorry we don't have that.");
-		//	context.Wait(MessageReceived);
-		//	return;
-		//}
+        [LuisIntent("Coding")]
+		public async Task Coding(IDialogContext context, LuisResult result)
+		{
+			context.Call(new CodingDialog(), Callback);
+		}
 
-	}
+        //[LuisIntent("QueryAmenities")]
+        //public async Task QueryAmenities(IDialogContext context, LuisResult result)
+        //{
+        //	foreach (var entity in result.Entities.Where(Entity => Entity.Type == "Amenity"))
+        //	{
+        //		var value = entity.Entity.ToLower();
+        //		if (value == "pool" || value == "gym" || value == "wifi" || value == "towels")
+        //		{
+        //			await context.PostAsync("Yes we have that!");
+        //			context.Wait(MessageReceived);
+        //			return;
+        //		}
+        //		else
+        //		{
+        //			await context.PostAsync("I'm sorry we don't have that.");
+        //			context.Wait(MessageReceived);
+        //			return;
+        //		}
+        //	}
+        //	await context.PostAsync("I'm sorry we don't have that.");
+        //	context.Wait(MessageReceived);
+        //	return;
+        //}
+
+    }
 }

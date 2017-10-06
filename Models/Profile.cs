@@ -1,7 +1,5 @@
 using Microsoft.Bot.Builder.FormFlow;
 using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters;
 
 #pragma warning disable 649
 
@@ -17,8 +15,8 @@ namespace Microsoft.Bot.Sample.FormBot
     };
 
     public enum eCookingItems { Cake, Pasta, Steak}
-    public enum eInterests { Environment, Engineering, Cooking, Sports, PublicSpeaking, Arts, Politics, OutwardBound, Gaming, Coding, Travel};
-    public enum eEducationLevels { School, College, University };
+    public enum eInterests { Environment, Engineering, Cooking, Sports, PublicSpeaking, Arts, Politics, OutwardBound, Gaming, Coding, Travel}
+    public enum eEducationLevels { School, College, University, Masters, PhD }
 
     [Serializable]
     public class PathwaysProfile
@@ -26,14 +24,11 @@ namespace Microsoft.Bot.Sample.FormBot
         [Prompt("What would you like me call you?")]
         public string Name;
 
-        [Prompt("Can we get your email address for our records? Promise we won't send you spam or share your email with anyone :)")]
+        [Prompt("Can we get your email address for our records? Promise I won't send you spam or share your email with anyone :)")]
         public string Email;
 
-        [Prompt("For the moment we have oppurtunities in these cities. Would you let us know which city you live in? Or just choose other.  {||}")]
+        [Prompt("Where do you live?{||}")]
         public eCities? City;
-
-        [Prompt("Are you interested in any of these areas? We will use this to customise your experience. Just type in the numbers separated with commas. {||}")]
-        public List<eInterests> Interests;
 
         [Prompt("What is the higest level of education you have completed? {||}")]
         public eEducationLevels? EducationLevel;
@@ -41,14 +36,11 @@ namespace Microsoft.Bot.Sample.FormBot
         [Prompt("Are you working at the moment?")]
         public bool IsWorking;
 
-        [Prompt("What role do you work as?")]
+        [Prompt("What role do you work at?")]
         public string Work;
 
-        [Prompt("Would you please tell me a little about your inspirations?")]
-        public string Inspiration;
-
-        [Prompt("What kind of cooking do you like? {||}")]
-        public string Cooking;
+        [Prompt("That is great! Are you ready to explore new oppurtunities?")]
+        public bool IsReady;
 
         public static IForm<PathwaysProfile> BuildForm()
         {
@@ -57,26 +49,26 @@ namespace Microsoft.Bot.Sample.FormBot
                     .Field(nameof(Name))
                     .Field(nameof(Email))
                     .Field(nameof(City))
-                    .Field(nameof(Interests))
                     .Field(nameof(EducationLevel))
                     .Field(nameof(IsWorking))
-                    .Field(nameof(Work), (c) => c.IsWorking == true)
-                    .Field(nameof(Cooking), (c) => c.Interests.Contains(eInterests.Cooking),
+                    .Field(nameof(Work), c => c.IsWorking)
+                    .Field(nameof(IsReady),
                     validate: async (state, values) =>
                     {
-
                         var result = new ValidateResult { IsValid = false, Value = values };
-                        if (values != null && Enum.IsDefined(typeof(eCookingItems), values))
+                        if (values != null && (bool) values)
                         {
                             result.IsValid = true;
-                        }else {
-                            result.Feedback = "Sorry, we could not find the option: "+ values + ". However, we have taken note of this option and may implement it in the future :).";
+                        }
+                        else
+                        {
+                            result.Feedback = "Take your time and I will be here when you are ready :)";
                         }
                         return result;
                     })
-
                     .AddRemainingFields()
-                    .Confirm("Are you sure? Here are your current selections: {*}")
+                    //.Confirm("Are you sure? Here are your current selections: {*}")
+                    .Message("Would you please tell me a little about your interests and inspirations? I will use this to customise your experience.")
                     .Build();
         }
     }

@@ -140,6 +140,7 @@
     <Compile Include="Dialogs\BadgeSearchResults.cs" />
     <Compile Include="Dialogs\CookingDialog.cs" />
     <Compile Include="Dialogs\GreetingDialog.cs" />
+    <Compile Include="Dialogs\CodingDialog.cs" />
     <Compile Include="Dialogs\LUISDialog.cs" />
     <Compile Include="Dialogs\PathwayDialog.cs" />
     <Compile Include="Global.asax.cs">

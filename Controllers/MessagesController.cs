@@ -3,14 +3,9 @@ using System.Web.Http;
 
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.FormFlow;
 using System.Net.Http;
 using System.Web.Http.Description;
 using System.Diagnostics;
-using System;
-using System.Text;
-using Newtonsoft.Json;
-using System.Configuration;
 using Microsoft.Bot.Sample.FormBot.Dialogs;
 
 namespace Microsoft.Bot.Sample.FormBot
@@ -18,29 +13,22 @@ namespace Microsoft.Bot.Sample.FormBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        internal static IDialog<PathwaysProfile> MakeRootDialogDeprecated()
+        internal static IDialog<PathwaysProfile> MakeRootDialog()
         {
-            return Chain.From(() => FormDialog.FromForm(PathwaysProfile.BuildForm))
-                //.ContinueWith(new LUISDialog(PathwaysProfile.BuildForm), AfterLuisContinuation)
-				.Do(OnProfileComplete); 
+            return Chain.From(() => new LUISDialog(PathwaysProfile.BuildForm))
+                .Do(OnProfileComplete);
         }
 
-		internal static IDialog<PathwaysProfile> MakeRootDialog()
-		{
-			return Chain.From(() => new LUISDialog(PathwaysProfile.BuildForm))
-				.Do(OnProfileComplete); ;
-		}
 
+        private async static Task<IDialog<string>> AfterLuisContinuation(IBotContext context, IAwaitable<object> res)
+        {
+            var token = await res;
+            var name = "User";
+            context.UserData.TryGetValue<string>("Name", out name);
+            return Chain.Return($"Thank you for using the Pathway bot, {name}");
+        }
 
-		private async static Task<IDialog<string>> AfterLuisContinuation(IBotContext context, IAwaitable<object> res)
-		{
-			var token = await res;
-			var name = "User";
-			context.UserData.TryGetValue<string>("Name", out name);
-			return Chain.Return($"Thank you for using the Pathway bot: {name}");
-		}
-
-		private static async Task OnProfileComplete(IBotContext context, IAwaitable<PathwaysProfile> profileDialog)
+        private static async Task OnProfileComplete(IBotContext context, IAwaitable<PathwaysProfile> profileDialog)
         {
             var profile = await profileDialog;
             var response = await profile.PostAsJsonToApi("ProfileCompleteApi");
