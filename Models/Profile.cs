@@ -24,7 +24,7 @@ namespace Microsoft.Bot.Sample.FormBot
         [Prompt("What would you like me call you?")]
         public string Name;
 
-        [Prompt("Can we get your email address for our records? Promise I won't send you spam or share your email with anyone :)")]
+        [Prompt("Can I get your email address for my records? Promise I won't send you spam or share your email with anyone :)")]
         public string Email;
 
         [Prompt("Where do you live?{||}")]

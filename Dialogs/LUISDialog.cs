@@ -51,6 +51,12 @@ namespace Microsoft.Bot.Sample.FormBot.Dialogs
 			context.Call(new CodingDialog(), Callback);
 		}
 
+        [LuisIntent("NotInterested")]
+		public async Task NotInterested(IDialogContext context, LuisResult result)
+		{
+			context.Call(new NotInterestedDialog(), Callback);
+		}
+
         //[LuisIntent("QueryAmenities")]
         //public async Task QueryAmenities(IDialogContext context, LuisResult result)
         //{

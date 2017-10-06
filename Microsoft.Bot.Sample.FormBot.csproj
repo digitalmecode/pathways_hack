@@ -142,6 +142,7 @@
     <Compile Include="Dialogs\GreetingDialog.cs" />
     <Compile Include="Dialogs\CodingDialog.cs" />
     <Compile Include="Dialogs\LUISDialog.cs" />
+    <Compile Include="Dialogs\NotInterestedDialog.cs" />
     <Compile Include="Dialogs\PathwayDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
