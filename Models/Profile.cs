@@ -11,12 +11,12 @@ namespace Microsoft.Bot.Sample.FormBot
 {
     public enum eCities
     {
-        Manchester =1 , Plymouth =2, Brighton=3, Other=0
+        Manchester =1 , Plymouth =2, Brighton=3
     };
 
     public enum eCookingItems { Cake, Pasta, Steak}
     public enum eInterests { Environment, Engineering, Cooking, Sports, PublicSpeaking, Arts, Politics, OutwardBound, Gaming, Coding, Travel}
-    public enum eEducationLevels { School, College, University, Masters, PhD }
+    public enum eEducationLevels { School, College, University}
 
     [Serializable]
     public class PathwaysProfile
