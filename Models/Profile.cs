@@ -21,7 +21,7 @@ namespace Microsoft.Bot.Sample.FormBot
     [Serializable]
     public class PathwaysProfile
     {
-        [Prompt("What would you like me call you?")]
+        [Prompt("To start with, what would you like me call you?")]
         public string Name;
 
         [Prompt("Can I get your email address for my records? Promise I won't send you spam or share your email with anyone :)")]
@@ -45,7 +45,7 @@ namespace Microsoft.Bot.Sample.FormBot
         public static IForm<PathwaysProfile> BuildForm()
         {
             return new FormBuilder<PathwaysProfile>()
-                    .Message("Hello there! Welcome to your future")
+                    .Message("Hello there! I can help you explore new career oppurtunities. I am in my infancy period, please excuse any hitches and glitches :)")
                     .Field(nameof(Name))
                     .Field(nameof(Email))
                     .Field(nameof(City))
