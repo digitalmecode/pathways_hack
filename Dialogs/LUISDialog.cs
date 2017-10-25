@@ -22,7 +22,7 @@ namespace Microsoft.Bot.Sample.FormBot.Dialogs
 		[LuisIntent("")]
 		public async Task None(IDialogContext context, LuisResult result)
 		{
-			await context.PostAsync("Sorry, we could not find the suggestions for you :( I will take note of this and work hard to find something that would excite you :)");
+			await context.PostAsync("Sorry, I really need a coffee. It has been a long day :( I couldn't find an oppurtunity for you today, I am still learning and will take note and work hard to find something that would excite you :)");
 			context.Wait(MessageReceived);
 		}
 

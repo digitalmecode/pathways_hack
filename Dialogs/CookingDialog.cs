@@ -33,11 +33,11 @@ namespace FormBot.Dialogs
                 {
                     new CardAction(
                         "openUrl",
-                        "Start this badge", null, results.BadgeDetail[0].Url)
+                        "Click to get started", null, results.BadgeDetail[0].Url)
                 }
             };
             message.Attachments.Add(card.ToAttachment());
-            message.Text = "I found this badge for you. It will help you up your cooking game. Oh, and it is backed by a big culinary organisation, so by completing this badge you will stand out from the crowd!";
+            message.Text = "Here is an oppurtunity to up your cooking game. So by completing this badge you will stand out from the crowd. Oh, and it is backed by a big culinary organisation!";
             await context.PostAsync(message);
         }
 

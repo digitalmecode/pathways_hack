@@ -1,10 +1,7 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
-using Microsoft.Bot.Sample.FormBot;
-using Newtonsoft.Json;
 
 namespace FormBot.Dialogs
 {
