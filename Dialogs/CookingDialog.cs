@@ -33,7 +33,7 @@ namespace FormBot.Dialogs
                 {
                     new CardAction(
                         "openUrl",
-                        "Click to get started", null, results.BadgeDetail[0].Url)
+                        "Get started", null, results.BadgeDetail[0].Url)
                 }
             };
             message.Attachments.Add(card.ToAttachment());
