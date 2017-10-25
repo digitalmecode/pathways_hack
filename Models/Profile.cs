@@ -11,7 +11,7 @@ namespace Microsoft.Bot.Sample.FormBot
 {
     public enum eCities
     {
-        Manchester =1 , Plymouth =2, Brighton=3, Other = 4
+        Manchester =1 , Plymouth =2, Brighton=3
     };
 
     public enum eCookingItems { Cake, Pasta, Steak}
